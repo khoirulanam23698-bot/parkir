@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Models\ParkingSlot;
 use App\Models\Payment;
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
     public function index()
     {
-        $slots = ParkingSlot::where('status', 'tersedia')->get();
+        $slots = ParkingSlot::with('area')->where('status', 'tersedia')->get();
         $myBookings = auth()->user()->bookings()->with('slot', 'payment')->latest()->get();
 
         return view('booking.index', compact('slots', 'myBookings'));
@@ -49,6 +50,12 @@ class BookingController extends Controller
             'status' => 'pending',
         ]);
 
+        ActivityLog::create([
+            'user' => auth()->user()->name,
+            'activity' => 'Membuat Booking',
+            'details' => "Slot {$slot->kode_slot} dipesan untuk kendaraan {$request->plat_kendaraan}",
+        ]);
+
         return redirect()->route('booking.index')->with('success', 'Booking berhasil dibuat.');
     }
 
@@ -61,6 +68,12 @@ class BookingController extends Controller
             'status' => 'lunas',
         ]);
 
+        ActivityLog::create([
+            'user' => auth()->user()->name,
+            'activity' => 'Melakukan Pembayaran',
+            'details' => "Pembayaran booking #{$booking->id} via {$request->metode}",
+        ]);
+
         return back()->with('success', 'Pembayaran berhasil.');
     }
 
@@ -71,6 +84,12 @@ class BookingController extends Controller
             'status' => 'selesai',
         ]);
         $booking->slot->update(['status' => 'tersedia']);
+
+        ActivityLog::create([
+            'user' => auth()->user()->name,
+            'activity' => 'Checkout Booking',
+            'details' => "Booking #{$booking->id} selesai, slot {$booking->slot->kode_slot} tersedia kembali",
+        ]);
 
         return back()->with('success', 'Checkout berhasil, slot kembali tersedia.');
     }

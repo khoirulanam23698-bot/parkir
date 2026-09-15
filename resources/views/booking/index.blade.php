@@ -23,7 +23,7 @@
                     <select name="parking_slot_id" class="border border-gray-300 rounded-lg p-2.5 w-full focus:ring-2 focus:ring-blue-400 focus:outline-none" required>
                         <option value="">-- Pilih Slot --</option>
                         @foreach($slots as $slot)
-                            <option value="{{ $slot->id }}">{{ $slot->kode_slot }} ({{ ucfirst($slot->jenis) }})</option>
+                            <option value="{{ $slot->id }}">{{ $slot->kode_slot }} ({{ ucfirst($slot->jenis) }}) - {{ $slot->area->name ?? 'Tanpa Area' }}</option>
                         @endforeach
                     </select>
                 </div>

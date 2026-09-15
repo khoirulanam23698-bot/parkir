@@ -32,9 +32,11 @@
 
                     <div>
                         <x-input-label for="role" :value="__('Role')" />
-                        <select id="role" name="role" class="mt-1 block w-full rounded-xl border-slate-300 focus:border-violet-500 focus:ring-violet-500 text-sm" required>
+                        <select id="role" name="role" class="mt-1 block w-full rounded-xl border-slate-300 focus:border-violet-500 focus:ring-violet-500">
                             <option value="user" {{ old('role') === 'user' ? 'selected' : '' }}>User</option>
                             <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Admin</option>
+                            <option value="petugas" {{ old('role') === 'petugas' ? 'selected' : '' }}>Petugas</option>
+                            <option value="owner" {{ old('role') === 'owner' ? 'selected' : '' }}>Owner</option>
                         </select>
                         <x-input-error class="mt-2" :messages="$errors->get('role')" />
                     </div>

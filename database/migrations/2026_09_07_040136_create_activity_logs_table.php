@@ -1,32 +1,107 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace App\Http\Controllers;
 
-return new class extends Migration
+use App\Models\Booking;
+use App\Models\ParkingSlot;
+use App\Models\Payment;
+use App\Models\ActivityLog;
+use Illuminate\Http\Request;
+
+class BookingController extends Controller
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function index()
     {
-        Schema::create('activity_logs', function (Blueprint $table) {
-            $table->id();
-           
-            $table->string('user');      
-            $table->string('activity'); 
-            $table->string('details')->nullable(); 
-            
-            $table->timestamps();
-        });
+        $slots = ParkingSlot::where('status', 'tersedia')->get();
+        $myBookings = auth()->user()->bookings()->with('slot', 'payment')->latest()->get();
+
+        return view('booking.index', compact('slots', 'myBookings'));
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function store(Request $request)
     {
-        Schema::dropIfExists('activity_logs');
+        $request->validate([
+            'parking_slot_id' => 'required|exists:parking_slots,id',
+            'plat_kendaraan' => 'required|string|max:20',
+            'nama_kendaraan' => 'nullable|string|max:50',
+        ]);
+
+        $slot = ParkingSlot::findOrFail($request->parking_slot_id);
+
+        if ($slot->status !== 'tersedia') {
+            return back()->with('error', 'Slot sudah terisi.');
+        }
+
+        $booking = Booking::create([
+            'user_id' => auth()->id(),
+            'parking_slot_id' => $slot->id,
+            'plat_kendaraan' => $request->plat_kendaraan,
+            'nama_kendaraan' => $request->nama_kendaraan,
+            'waktu_masuk' => now(),
+            'status' => 'aktif',
+        ]);
+
+        $slot->update(['status' => 'terisi']);
+
+        $tarif = $slot->jenis === 'mobil' ? 5000 : 2000;
+        Payment::create([
+            'booking_id' => $booking->id,
+            'jumlah' => $tarif,
+            'status' => 'pending',
+        ]);
+
+        ActivityLog::create([
+            'user' => auth()->user()->name,
+            'activity' => 'Membuat Booking',
+            'details' => "Slot {$slot->kode_slot} dipesan untuk kendaraan {$request->plat_kendaraan}",
+        ]);
+
+        return redirect()->route('booking.index')->with('success', 'Booking berhasil dibuat.');
     }
-};
+
+    public function pay(Request $request, Booking $booking)
+    {
+        $request->validate(['metode' => 'required|in:tunai,transfer,qris']);
+
+        $booking->payment->update([
+            'metode' => $request->metode,
+            'status' => 'lunas',
+        ]);
+
+        ActivityLog::create([
+            'user' => auth()->user()->name,
+            'activity' => 'Melakukan Pembayaran',
+            'details' => "Pembayaran booking #{$booking->id} via {$request->metode}",
+        ]);
+
+        return back()->with('success', 'Pembayaran berhasil.');
+    }
+
+    public function checkout(Booking $booking)
+    {
+        $booking->update([
+            'waktu_keluar' => now(),
+            'status' => 'selesai',
+        ]);
+        $booking->slot->update(['status' => 'tersedia']);
+
+        ActivityLog::create([
+            'user' => auth()->user()->name,
+            'activity' => 'Checkout Booking',
+            'details' => "Booking #{$booking->id} selesai, slot {$booking->slot->kode_slot} tersedia kembali",
+        ]);
+
+        return back()->with('success', 'Checkout berhasil, slot kembali tersedia.');
+    }
+
+    public function cetakStruk(Booking $booking)
+    {
+        if (!auth()->user()->isAdmin() && !auth()->user()->isPetugas() && $booking->user_id !== auth()->id()) {
+            abort(403, 'Akses ditolak.');
+        }
+
+        $booking->load('slot', 'payment');
+
+        return view('booking.struk', compact('booking'));
+    }
+}

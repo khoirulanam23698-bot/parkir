@@ -11,6 +11,11 @@ class Booking extends Model
         'nama_kendaraan', 'waktu_masuk', 'waktu_keluar', 'status'
     ];
 
+    protected $casts = [
+        'waktu_masuk' => 'datetime',
+        'waktu_keluar' => 'datetime',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

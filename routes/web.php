@@ -55,7 +55,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/slots', [ParkingSlotController::class, 'index'])->name('admin.slots.index');
     Route::post('/slots', [ParkingSlotController::class, 'store'])->name('admin.slots.store');
     Route::delete('/slots/{slot}', [ParkingSlotController::class, 'destroy'])->name('admin.slots.destroy');
-  Route::get('/admin/activity-logs', [\App\Http\Controllers\Admin\ActivityLogController::class, 'index'])->name('admin.activity_logs');
+  Route::get('/activity-logs', [\App\Http\Controllers\Admin\ActivityLogController::class, 'index'])->name('admin.activity_logs');
 
     Route::get('/bookings', [AdminBookingController::class, 'index'])->name('admin.bookings.index');
 
@@ -71,7 +71,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
 Route::middleware(['auth', 'petugas'])->prefix('petugas')->group(function () {
     Route::get('/transaksi', [AdminBookingController::class, 'index'])->name('petugas.transaksi.index');
-    Route::post('/booking/{booking}/struk', [BookingController::class, 'cetakStruk'])->name('petugas.struk.cetak');
+    Route::get('/booking/{booking}/struk', [BookingController::class, 'cetakStruk'])->name('petugas.struk.cetak');
 });
 
 Route::middleware(['auth', 'owner'])->prefix('owner')->group(function () {

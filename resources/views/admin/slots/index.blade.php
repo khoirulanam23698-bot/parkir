@@ -19,12 +19,12 @@
                     @csrf
                     <input type="text" name="kode_slot" placeholder="Kode Slot (A1, A2, ...)" class="border border-gray-300 rounded-lg p-2.5 flex-1 min-w-[180px] focus:ring-2 focus:ring-blue-400 focus:outline-none" required>
 
-                    <select name="jenis" class="border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-blue-400 focus:outline-none" required>
+                    <select name="jenis" class="border border-gray-300 rounded-lg p-5.2 focus:ring-2 focus:ring-blue-400 focus:outline-none" required>
                         <option value="motor">Motor</option>
                         <option value="mobil">Mobil</option>
                     </select>
 
-                    <select name="parking_area_id" class="border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-blue-400 focus:outline-none" required>
+                    <select name="parking_area_id" class="border border-gray-300 rounded-lg p-5.2 focus:ring-2 focus:ring-blue-400 focus:outline-none" required>
                         <option value="">-- Pilih Area --</option>
                         @foreach($areas as $area)
                             <option value="{{ $area->id }}">{{ $area->name }}</option>

@@ -82,20 +82,21 @@
                         @if($b->payment->status === 'pending')
                         <form action="{{ route('booking.pay', $b) }}" method="POST" class="flex gap-1">
                             @csrf
-                            <select name="metode" class="border border-gray-300 rounded text-xs px-1">
+                            <select name="metode" class="border border-gray-300 rounded text-xs px-3">
                                 <option value="tunai">Tunai</option>
                                 <option value="transfer">Transfer</option>
                                 <option value="qris">QRIS</option>
                             </select>
                             <button class="text-blue-600 text-xs font-medium hover:underline">Bayar</button>
-                        </form>
-                        @endif
+                            @endif
                         @if($b->status === 'aktif')
                         <form action="{{ route('booking.checkout', $b) }}" method="POST">
                             @csrf
                             <button class="text-red-600 text-xs font-medium hover:underline">Checkout</button>
                         </form>
                         @endif
+                        </form>
+                        
                     </div>
                 </div>
             </div>

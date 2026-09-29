@@ -17,4 +17,11 @@ class ParkingSlot extends Model
     {
         return $this->belongsTo(ParkingArea::class, 'parking_area_id');
     }
+
+    public function tariff()
+{
+    return \App\Models\ParkingTariff::where('jenis_kendaraan', $this->jenis)
+        ->where('is_active', true)
+        ->first();
+}
 }

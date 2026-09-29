@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kabasa - Parkir Jadi Lebih Mudah</title>
-<script src="https://cdn.tailwindcss.com"></script>
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
 <style>
   @keyframes float {
     0%, 100% { transform: translateY(0px); }
@@ -30,7 +30,7 @@
   .animate-blob-delay { animation: blob 8s infinite ease-in-out; animation-delay: 2s; }
   .animate-blob-delay2 { animation: blob 8s infinite ease-in-out; animation-delay: 4s; }
   .gradient-bg {
-    background: linear-gradient(-45deg, #6d28d9, #2563eb, #0ea5e9, #7c3aed);
+    background: linear-gradient(-45deg, #000000, #2563eb, #0ea5e9, #7c3aed);
     background-size: 400% 400%;
     animation: gradientShift 12s ease infinite;
   }
@@ -52,10 +52,8 @@
     <div class="hidden md:flex gap-8 text-sm font-medium text-slate-600">
       <a href="#fitur" class="hover:text-violet-600 transition">Fitur</a>
       <a href="#cara" class="hover:text-violet-600 transition">Cara Kerja</a>
-      <a href="#testimoni" class="hover:text-violet-600 transition">Testimoni</a>
     </div>
     <div class="flex gap-3">
-      <a href="{{ route('login') }}" class="px-4 py-2 rounded-full text-sm font-semibold text-violet-600 border border-violet-200 hover:bg-violet-50 transition">Masuk</a>
       <a href="{{ route('register') }}" class="px-4 py-2 rounded-full text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-blue-500 shadow-lg hover:shadow-violet-300 hover:scale-105 transition">Daftar</a>
     </div>
   </div>
@@ -86,11 +84,10 @@
       Booking slot parkir, kelola kendaraan, dan bayar dengan mudah — semuanya dalam satu aplikasi.
     </p>
     <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-      <a href="{{ route('register') }}" class="px-8 py-4 rounded-2xl bg-white text-violet-700 font-bold shadow-xl hover:scale-105 hover:shadow-2xl transition glow">
-        🚀 Daftar Sekarang
-      </a>
+  
+  
       <a href="{{ route('login') }}" class="px-8 py-4 rounded-2xl bg-white/10 backdrop-blur-md border-2 border-white/60 text-white font-bold hover:bg-white/20 transition">
-        Sudah Punya Akun?
+        Sudah Punya Akun? 🚀
       </a>
     </div>
 
@@ -138,7 +135,7 @@
         🚗
       </div>
       <h3 class="text-xl font-bold mb-2">Booking Cepat</h3>
-      <p class="text-slate-500">Booking untuk motor atau mobil hanya dalam hitungan detik, tanpa ribet.</p>
+      <p class="text-slate-500">Booking untuk motor atau mobil dan lain lainya hanya dalam hitungan detik, tanpa ribet.</p>
     </div>
 
     <div class="card-hover bg-white rounded-3xl p-8 shadow-lg border border-slate-100">

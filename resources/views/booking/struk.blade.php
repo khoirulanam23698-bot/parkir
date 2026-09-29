@@ -7,7 +7,7 @@
         body { font-family: monospace; width: 280px; margin: 0 auto; padding: 16px; font-size: 13px; }
         h2 { text-align: center; margin: 0 0 4px; font-size: 16px; }
         .center { text-align: center; }
-        hr { border: none; border-top: 1px dashed #000; margin: 8px 0; }
+        hr { border: none; border-top: 1px dashed #002fff; margin: 8px 0; }
         table { width: 100%; }
         td { padding: 2px 0; }
         .right { text-align: right; }
@@ -41,7 +41,8 @@
         <tr class="total"><td>Total Bayar</td><td class="right">Rp{{ number_format($booking->payment->jumlah ?? 0, 0, ',', '.') }}</td></tr>
     </table>
     <hr>
-    <p class="center">ありがとうございます。お気をつけて。</p>
+    <p class="center">Terimakasih sudah parkir di Kabasa mohon untuk hati-hati di jalan dan tetap patuhi peraturan lalulintas:)</p>
+    <p class="center">@kabasa_parkir_yuk</p>
 
     <div class="no-print center" style="margin-top:16px;">
         <button onclick="window.print()">Cetak</button>
